@@ -63,7 +63,12 @@ module Reform
     def self.inline_representer(base_module, name, options, &block)
       name = name.to_s.singularize.camelize
 
-      Class.new(Form) do
+      Class.new(options[:outer_form]) do # this would allow inheriting all methods and included modules from the outer form.
+        self.representer_class.instance_eval do
+          @representable_attrs = nil
+          @errors = nil
+        end
+
         instance_exec &block
 
         @form_name = name

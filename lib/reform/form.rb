@@ -21,6 +21,7 @@ module Reform
 
       def property(name, options={}, &block)
         options[:private_name] = options.delete(:as)
+        options[:outer_form] = self
 
         # at this point, :extend is a Form class.
         definition = representer_class.property(name, options, &block)
