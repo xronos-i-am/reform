@@ -45,7 +45,7 @@ module Reform::Form::Dry
       # messes with the input hash structure.
       def call(form, reform_errors)
         # a message item looks like: {:confirm_password=>["size cannot be less than 2"]}
-        @validator.with(form: form).call(input_hash(form)).messages.each do |field, dry_error|
+        @validator.with(form: form).call(input_hash(form)).messages(locale: I18n.locale).each do |field, dry_error|
           dry_error.each do |attr_error|
             reform_errors.add(field, attr_error)
           end
