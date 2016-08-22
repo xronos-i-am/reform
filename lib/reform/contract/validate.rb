@@ -27,7 +27,10 @@ private
   def validate_nested!(errors, prefixes)
     schema.each(twin: true) do |dfn|
       # recursively call valid? on nested form.
-      Disposable::Twin::PropertyProcessor.new(dfn, self).() { |form| form.validate!(errors, prefixes+[dfn[:name]]) }
+      Disposable::Twin::PropertyProcessor.new(dfn, self).() do |form| 
+        next if dfn[:validate_if] && !dfn[:validate_if].call(self)
+        form.validate!(errors, prefixes+[dfn[:name]])
+      end
     end
   end
 end
